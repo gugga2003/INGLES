@@ -4,24 +4,231 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¡Aprende Verbos en Inglés!</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#FFD54F">
-    <link rel="apple-touch-icon" href="icon-192x192.png">
     <style>
-        /* ... (el mismo CSS que antes) ... */
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #FFD54F;
+            background-image: linear-gradient(45deg, #FFD54F 25%, transparent 25%, transparent 75%, #FFD54F 75%, #FFD54F), 
+                              linear-gradient(45deg, #FFD54F 25%, transparent 25%, transparent 75%, #FFD54F 75%, #FFD54F);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+        }
+        .container {
+            background-color: #FF9800;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            transform: perspective(1000px) rotateX(5deg);
+            transition: transform 0.3s ease;
+        }
+        .container:hover {
+            transform: perspective(1000px) rotateX(0deg) scale(1.02);
+        }
+        .card {
+            width: 300px;
+            height: 400px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .card-front {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .card-back {
+            background-color: #2196F3;
+            color: white;
+            transform: rotateY(180deg);
+        }
+        .card-border {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            right: 3px;
+            bottom: 3px;
+            border: 4px solid rgba(255,255,255,0.7);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+        .card-title {
+            font-size: 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .card-verb {
+            font-size: 64px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+        .card-meaning {
+            font-size: 24px;
+            font-style: italic;
+        }
+        .btn {
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 50px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+        .btn:active {
+            transform: translateY(1px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        .pronunciation-btn {
+            background-color: #E91E63;
+            color: white;
+        }
+        .meaning-btn {
+            background-color: #9C27B0;
+            color: white;
+        }
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
-    <!-- ... (el mismo HTML que antes) ... -->
-    <script>
-        // ... (el mismo JavaScript que antes) ...
+    <div class="container">
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-face card-front">
+                    <div class="card-border"></div>
+                    <div class="card-title">INFINITIVO</div>
+                    <div class="card-verb">BE</div>
+                    <div class="card-meaning">ser/estar</div>
+                </div>
+                <div class="card-face card-back">
+                    <div class="card-border"></div>
+                    <div class="card-title">PASADO SIMPLE</div>
+                    <div class="card-verb">WAS/WERE</div>
+                    <div class="card-meaning">era/estaba</div>
+                </div>
+            </div>
+        </div>
+        <div class="button-container">
+            <button class="btn pronunciation-btn">¡Escuchar!</button>
+            <button class="btn meaning-btn">Significado</button>
+        </div>
+    </div>
 
-        // Registrar el Service Worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('service-worker.js')
-                .then((reg) => console.log('Service worker registered.', reg))
-                .catch((err) => console.log('Service worker registration failed.', err));
+    <script>
+        const card = document.querySelector('.card');
+        const pronunciationBtn = document.querySelector('.pronunciation-btn');
+        const meaningBtn = document.querySelector('.meaning-btn');
+        const cardFrontVerb = document.querySelector('.card-front .card-verb');
+        const cardFrontMeaning = document.querySelector('.card-front .card-meaning');
+        const cardBackVerb = document.querySelector('.card-back .card-verb');
+        const cardBackMeaning = document.querySelector('.card-back .card-meaning');
+
+        const verbs = [
+            { present: 'BE', past: 'WAS/WERE', spanishPresent: 'ser/estar', spanishPast: 'era/estaba' },
+            { present: 'BEAT', past: 'BEAT', spanishPresent: 'golpear', spanishPast: 'golpeó' },
+            { present: 'BECOME', past: 'BECAME', spanishPresent: 'convertirse', spanishPast: 'se convirtió' },
+            { present: 'BEGIN', past: 'BEGAN', spanishPresent: 'empezar', spanishPast: 'empezó' },
+            { present: 'BITE', past: 'BIT', spanishPresent: 'morder', spanishPast: 'mordió' },
+            { present: 'BLOW', past: 'BLEW', spanishPresent: 'soplar', spanishPast: 'sopló' },
+            { present: 'BREAK', past: 'BROKE', spanishPresent: 'romper', spanishPast: 'rompió' },
+            { present: 'BRING', past: 'BROUGHT', spanishPresent: 'traer', spanishPast: 'trajo' },
+            { present: 'BUILD', past: 'BUILT', spanishPresent: 'construir', spanishPast: 'construyó' },
+            { present: 'BUY', past: 'BOUGHT', spanishPresent: 'comprar', spanishPast: 'compró' },
+            { present: 'CATCH', past: 'CAUGHT', spanishPresent: 'atrapar', spanishPast: 'atrapó' },
+            { present: 'CHOOSE', past: 'CHOSE', spanishPresent: 'elegir', spanishPast: 'eligió' },
+            { present: 'COME', past: 'CAME', spanishPresent: 'venir', spanishPast: 'vino' },
+            { present: 'COST', past: 'COST', spanishPresent: 'costar', spanishPast: 'costó' },
+            { present: 'CUT', past: 'CUT', spanishPresent: 'cortar', spanishPast: 'cortó' },
+            { present: 'DO', past: 'DID', spanishPresent: 'hacer', spanishPast: 'hizo' },
+            { present: 'DRAW', past: 'DREW', spanishPresent: 'dibujar', spanishPast: 'dibujó' },
+            { present: 'DREAM', past: 'DREAMT', spanishPresent: 'soñar', spanishPast: 'soñó' },
+            { present: 'DRINK', past: 'DRANK', spanishPresent: 'beber', spanishPast: 'bebió' },
+            { present: 'DRIVE', past: 'DROVE', spanishPresent: 'conducir', spanishPast: 'condujo' },
+            { present: 'EAT', past: 'ATE', spanishPresent: 'comer', spanishPast: 'comió' },
+            { present: 'FALL', past: 'FELL', spanishPresent: 'caer', spanishPast: 'cayó' },
+            { present: 'FIND', past: 'FOUND', spanishPresent: 'encontrar', spanishPast: 'encontró' },
+            { present: 'GET', past: 'GOT', spanishPresent: 'obtener', spanishPast: 'obtuvo' },
+            { present: 'GO', past: 'WENT', spanishPresent: 'ir', spanishPast: 'fue' },
+            { present: 'HAVE', past: 'HAD', spanishPresent: 'tener', spanishPast: 'tuvo' },
+            { present: 'LEAVE', past: 'LEFT', spanishPresent: 'dejar/salir', spanishPast: 'dejó/salió' }
+        ];
+
+        let currentVerbIndex = 0;
+
+        card.addEventListener('click', () => {
+            card.classList.toggle('flipped');
+        });
+
+        pronunciationBtn.addEventListener('click', () => {
+            const text = card.classList.contains('flipped') ? verbs[currentVerbIndex].past : verbs[currentVerbIndex].present;
+            speak(text, 'en-US');
+        });
+
+        meaningBtn.addEventListener('click', () => {
+            const text = card.classList.contains('flipped') ? verbs[currentVerbIndex].spanishPast : verbs[currentVerbIndex].spanishPresent;
+            speak(text, 'es-ES');
+        });
+
+        function speak(text, lang) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            speechSynthesis.speak(utterance);
         }
+
+        function nextVerb() {
+            currentVerbIndex = (currentVerbIndex + 1) % verbs.length;
+            cardFrontVerb.textContent = verbs[currentVerbIndex].present;
+            cardFrontMeaning.textContent = verbs[currentVerbIndex].spanishPresent;
+            cardBackVerb.textContent = verbs[currentVerbIndex].past;
+            cardBackMeaning.textContent = verbs[currentVerbIndex].spanishPast;
+            card.classList.remove('flipped');
+        }
+
+        // Cambiar al siguiente verbo cada 10 segundos
+        setInterval(nextVerb, 10000);
     </script>
 </body>
 </html>
