@@ -1,0 +1,21 @@
+{
+    "name": "Aprende Verbos en Inglés",
+    "short_name": "Verbos Inglés",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#FFD54F",
+    "theme_color": "#FFD54F",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "icon-192x192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "icon-512x512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Aprende Verbos en Inglés!</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#FFD54F">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <style>
+        /* ... (el mismo CSS que antes) ... */
+    </style>
+</head>
+<body>
+    <!-- ... (el mismo HTML que antes) ... -->
+    <script>
+        // ... (el mismo JavaScript que antes) ...
+
+        // Registrar el Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then((reg) => console.log('Service worker registered.', reg))
+                .catch((err) => console.log('Service worker registration failed.', err));
+        }
+    </script>
+</body>
+</html>
